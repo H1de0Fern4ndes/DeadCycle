@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RPG 2D Zumbi - Wave Survival</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="ui">
+        <div>Wave: <span id="waveDisplay">1</span></div>
+        <div>Nível: <span id="levelDisplay">1</span> | XP: <span id="xpDisplay">0</span>/<span id="maxXpDisplay">10</span></div>
+        <div>HP: <span id="hpDisplay">100</span>/<span id="maxHpDisplay">100</span></div>
+        <div>Moedas: 🟡 <span id="goldDisplay">0</span></div>
+        <div class="sub-text"><b>I</b> Inventário | <b>B</b> Loja | <b>M</b> Meta-Shop</div>
+    </div>
+
+    <div id="skillsHUD">
+        <div class="skill-box" id="skill0" onclick="window.gameInstance.player.useSkill(0, window.gameInstance)">
+            <span>[Livre] [Espaço]</span>
+            <div class="cd-overlay" id="cdSkill0"></div>
+        </div>
+        <div class="skill-box" id="skill1" onclick="window.gameInstance.player.useSkill(1, window.gameInstance)">
+            <span>[Livre] [Q]</span>
+            <div class="cd-overlay" id="cdSkill1"></div>
+        </div>
+        <div class="skill-box" id="skill2" onclick="window.gameInstance.player.useSkill(2, window.gameInstance)">
+            <span>[Livre] [E]</span>
+            <div class="cd-overlay" id="cdSkill2"></div>
+        </div>
+    </div>
+
+    <div id="topButtons">
+        <button class="btn-top" onclick="UI.toggleInventory()">🎒 Inventário (I)</button>
+        <button class="btn-top btn-shop" onclick="UI.toggleShop()">🛒 Loja (B)</button>
+        <button class="btn-top" style="background:#8e44ad" onclick="UI.toggleMetaShop()">👑 Meta (M)</button>
+    </div>
+
+    <!-- MODAL MENU INICIAL DE SELEÇÃO DE CLASSE -->
+    <div id="menuModal" style="display:block;">
+        <h1 style="color:#f1c40f; margin-bottom:5px;">ZOMBIE SURVIVAL ROGUELITE</h1>
+        <p>Escolha sua Classe para iniciar a sobrevivência:</p>
+        <div id="classListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:350px; overflow-y:auto; margin-bottom:15px;"></div>
+    </div>
+
+    <!-- MODAL ROLETA DO BOSS -->
+    <div id="rouletteModal">
+        <h2 style="color:#f39c12">🎁 TESOURO DO CHEFE!</h2>
+        <p>Escolha 1 recompensa exclusiva:</p>
+        <div id="rouletteGrid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:15px;"></div>
+    </div>
+
+    <div id="levelUpModal">
+        <h2>LEVEL UP!</h2>
+        <p>Escolha uma melhoria ou passiva:</p>
+        <div id="upgradeOptions"></div>
+    </div>
+
+    <div id="inventoryModal">
+        <h2>INVENTÁRIO & ATRIBUTOS</h2>
+        <div class="inv-container">
+            <div class="stats-summary" id="statsSummaryContent">Carregando...</div>
+
+            <div class="inv-section">
+                <div class="section-title">DECK DE HABILIDADES:</div>
+                <div id="unlockedSkillsGrid" style="display:flex; flex-direction:column; gap:6px; max-height:120px; overflow-y:auto;"></div>
+            </div>
+
+            <div class="inv-section">
+                <div class="section-title">PASSIVAS ATIVAS & NÍVEIS:</div>
+                <div id="passivesList"></div>
+            </div>
+
+            <div class="inv-section">
+                <div class="section-title">EQUIPAMENTOS ATUAIS (6 SLOTS):</div>
+                <div class="slot-grid-6">
+                    <div><small>Arma Princ.</small><div id="slot-weapon" class="item-slot" onclick="UI.unequip('weapon')">Vazio</div></div>
+                    <div><small>Arma Secund.</small><div id="slot-secondary" class="item-slot" onclick="UI.unequip('secondary')">Vazio</div></div>
+                    <div><small>Capacete</small><div id="slot-head" class="item-slot" onclick="UI.unequip('head')">Vazio</div></div>
+                    <div><small>Peitoral</small><div id="slot-armor" class="item-slot" onclick="UI.unequip('armor')">Vazio</div></div>
+                    <div><small>Botas</small><div id="slot-boots" class="item-slot" onclick="UI.unequip('boots')">Vazio</div></div>
+                    <div><small>Acessório</small><div id="slot-accessory" class="item-slot" onclick="UI.unequip('accessory')">Vazio</div></div>
+                </div>
+            </div>
+
+            <div class="inv-section">
+                <div class="section-title">MOCHILA:</div>
+                <div id="backpackGrid" class="slot-grid"></div>
+            </div>
+        </div>
+        <button class="close-btn" onclick="UI.toggleInventory()">Fechar</button>
+    </div>
+
+    <div id="shopModal">
+        <h2>🛒 LOJA DE HABILIDADES</h2>
+        <p>Moedas Disponíveis: 🟡 <span id="shopGoldDisplay">0</span></p>
+        <div class="shop-container" id="shopOptionsGrid"></div>
+        <button class="close-btn" onclick="UI.toggleShop()">Fechar Loja</button>
+    </div>
+
+    <div id="metaModal">
+        <h2>👑 META-PROGRESSÃO PERMANENTE</h2>
+        <p>Ouro Total Salvo: 🟡 <span id="metaGoldDisplay">0</span></p>
+        <div class="shop-container" id="metaOptionsGrid"></div>
+        <button class="close-btn" onclick="UI.toggleMetaShop()">Fechar</button>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script src="js/AudioSystem.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/Item.js"></script>
+    <script src="js/Player.js"></script>
+    <script src="js/Zombie.js"></script>
+    <script src="js/UI.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

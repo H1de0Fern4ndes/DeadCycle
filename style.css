@@ -1,0 +1,287 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #111;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+canvas {
+    background: #1e1e1e;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    display: block;
+}
+
+#ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.sub-text {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 4px;
+}
+
+#skillsHUD {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.skill-box {
+    background: rgba(0,0,0,0.8);
+    border: 2px solid #555;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+    min-width: 90px;
+    text-align: center;
+}
+
+.cd-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(231, 76, 60, 0.6);
+    height: 0%;
+    pointer-events: none;
+}
+
+#topButtons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.btn-top {
+    background: #2c3e50;
+    color: #fff;
+    border: 1px solid #456789;
+    padding: 8px 12px;
+    font-family: 'Courier New', Courier, monospace;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-top:hover { background: #34495e; }
+
+.btn-shop { background: #d35400; border-color: #e67e22; }
+.btn-shop:hover { background: #e67e22; }
+
+#mobileControls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.mobile-btn {
+    background: rgba(41, 128, 185, 0.8);
+    color: white;
+    border: 1px solid #3498db;
+    padding: 10px 14px;
+    border-radius: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+#levelUpModal, #inventoryModal, #shopModal {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(20, 20, 20, 0.95);
+    border: 2px solid #444;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 100;
+    width: 450px;
+    max-height: 85vh;
+    overflow-y: auto;
+    text-align: center;
+}
+
+#levelUpModal h2, #inventoryModal h2, #shopModal h2 {
+    margin-top: 0;
+    color: #f1c40f;
+}
+
+.upgrade-btn, .close-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    width: 100%;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.upgrade-btn:hover { background: #2ecc71; }
+.close-btn { background: #c0392b; margin-top: 15px; }
+.close-btn:hover { background: #e74c3c; }
+
+.section-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #aaa;
+    margin-top: 10px;
+    text-align: left;
+}
+
+/* Grade de 6 slots para equipamentos */
+.slot-grid-6 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.item-slot {
+    background: #2a2a2a;
+    border: 1px dashed #555;
+    height: 70px; /* Aumentado para dar espaço aos atributos e efeitos */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 4px;
+    text-align: center;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.item-slot:hover {
+    border-color: #f1c40f;
+}
+
+.item-slot:hover { border-color: #f1c40f; }
+
+.rarity-common { border-color: #aaa !important; background: #222 !important; }
+.rarity-rare { border-color: #3498db !important; background: #1a2a3a !important; }
+.rarity-epic { border-color: #9b59b6 !important; background: #2a1a3a !important; }
+.rarity-legendary { border-color: #f39c12 !important; background: #3a2a1a !important; box-shadow: inset 0 0 8px rgba(241, 196, 15, 0.4); }
+
+.stats-summary {
+    background: #111;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.stat-boost { color: #2ecc71; font-weight: bold; }
+
+.passive-badge {
+    background: #1e2b37;
+    border: 1px solid #34495e;
+    font-size: 11px;
+    padding: 4px 8px;
+    margin: 3px 0;
+    text-align: left;
+    border-radius: 3px;
+}
+
+.shop-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.shop-item {
+    background: #222;
+    border: 1px solid #444;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.shop-item-info { font-size: 12px; }
+.shop-item-title { font-weight: bold; color: #f1c40f; margin-bottom: 3px; }
+
+.buy-btn {
+    background: #f1c40f;
+    color: #000;
+    border: none;
+    padding: 6px 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.buy-btn:disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+}
+#levelUpModal, #inventoryModal, #shopModal, #metaModal {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(20, 20, 20, 0.95);
+    border: 2px solid #444;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 100;
+    width: 450px;
+    max-height: 85vh;
+    overflow-y: auto;
+    text-align: center;
+}
+#menuModal, #rouletteModal {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(20, 20, 20, 0.95);
+    border: 2px solid #f1c40f;
+    padding: 25px;
+    border-radius: 8px;
+    z-index: 200;
+    width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    text-align: center;
+}
